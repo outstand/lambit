@@ -33,6 +33,7 @@
     "test:unit": "mocha 'src/**/*.test.js' -r babel-register",
     "test": "npm-run-all test:*",
     "build": "babel src -d dist --minified --ignore '**/*.test.js'",
+    "watch": "npm run build -- -w",
     "prepublish": "npm run test && npm run build"
   },
   "dependencies": {},
