@@ -1,12 +1,62 @@
 {
   "name": "lambchop",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "version": "0.1.0",
+  "description": "Modern hosting features for Lambda@Edge",
+  "author": "Jason Maurer",
+  "license": "MIT",
+  "homepage": "https://github.com/jsonmaur/lambchop#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsonmaur/lambchop.git"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "keywords": [
+    "aws",
+    "amazon",
+    "lambda",
+    "edge",
+    "lambda@edge",
+    "static",
+    "modern",
+    "hosting",
+    "pushstate",
+    "redirect",
+    "rewrite"
+  ],
+  "files": [
+    "dist/",
+    "license",
+    "readme.md"
+  ],
+  "main": "dist/index.js",
+  "scripts": {
+    "test:lint": "standard --verbose | snazzy",
+    "test:unit": "mocha 'src/**/*.test.js' -r babel-register",
+    "test": "npm-run-all test:*",
+    "build": "babel src -d dist --minified --ignore '**/*.test.js'",
+    "prepublish": "npm run test && npm run build"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "babel-cli": "6.24.1",
+    "babel-plugin-transform-async-to-generator": "6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.24.1",
+    "babel-register": "6.24.1",
+    "chai": "4.1.1",
+    "mocha": "3.5.0",
+    "npm-run-all": "4.0.2",
+    "snazzy": "7.0.0",
+    "standard": "10.0.3"
+  },
+  "babel": {
+    "plugins": [
+      "transform-async-to-generator",
+      "transform-es2015-modules-commonjs"
+    ]
+  },
+  "standard": {
+    "globals": [
+      "describe",
+      "it"
+    ]
+  }
 }
