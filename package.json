@@ -31,6 +31,7 @@
   "scripts": {
     "test:lint": "standard --verbose | snazzy",
     "test:unit": "mocha 'src/**/*.test.js' -r babel-register",
+    "test:integration": "mocha 'test/**/*.spec.js' -r babel-register",
     "test": "cross-env NODE_ENV=testing npm-run-all test:*",
     "build": "babel src -d dist --minified --ignore '**/*.test.js'",
     "watch": "npm run build -- -w",

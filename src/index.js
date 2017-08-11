@@ -2,6 +2,7 @@ import { get } from 'object-path'
 import * as logger from './utils/logger'
 import * as trigger from './utils/trigger'
 // import * as segment from './utils/segment'
+import auth from './components/auth'
 import cleanUrl from './components/clean-url'
 // import redirect from './components/redirect'
 
@@ -18,9 +19,10 @@ module.exports = (opts = {}) => {
       // TODO: segment query params
       // TODO: redirects with host (for www)
       // TODO: a/b testing
+      // TODO: validate all options
 
-      opts.cleanUrls = opts.cleanUrls || false
       opts.auth = opts.auth || false
+      opts.cleanUrls = opts.cleanUrls || false
       opts.snippets = opts.snippets || []
       opts.headers = opts.headers || []
       opts.redirects = opts.redirects || []
@@ -28,7 +30,7 @@ module.exports = (opts = {}) => {
 
       switch (trigger.findType(req, res)) {
         case 'viewer-request': {
-          // auth
+          opts.auth && auth(req, res, opts.auth)
           break
         }
 

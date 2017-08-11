@@ -1,11 +1,5 @@
 import { expect } from 'chai'
-import sinon from 'sinon'
-import lambchop from './index'
-
-const headers = {
-  via: [{ value: 'cloudfront' }],
-  'user-agent': [{ value: 'cloudfront' }]
-}
+import { run } from './helpers'
 
 describe('unit: index', () => {
   // const now = Date.now()
@@ -22,39 +16,8 @@ describe('unit: index', () => {
   // }
 
   it('default request passed through', async () => {
-    const spy = sinon.spy()
-    const request = { uri: '/' }
-    const evt = { Records: [{ cf: { request } }] }
-    lambchop()(evt, null, spy)
-    expect(spy.args[0][1]).to.deep.equal(request)
-  })
-})
-
-describe('unit: index (clean urls)', () => {
-  it('uses clean urls', async () => {
-    const spy = sinon.spy()
-    const request = { uri: '/hello', headers }
-    const evt = { Records: [{ cf: { request } }] }
-    lambchop({ cleanUrls: true })(evt, null, spy)
-    expect(spy.args[0][1].uri).to.equal('/hello.html')
-  })
-
-  it('uses clean urls (html extension)', async () => {
-    const spy = sinon.spy()
-    const request = { uri: '/hello.html', headers }
-    const evt = { Records: [{ cf: { request } }] }
-    lambchop({ cleanUrls: true })(evt, null, spy)
-    expect(spy.args[0][1].status).to.equal('301')
-    expect(spy.args[0][1].headers.location[0].value).to.equal('/hello')
-  })
-
-  it('uses clean urls (index file)', async () => {
-    const spy = sinon.spy()
-    const request = { uri: '/index.html', headers }
-    const evt = { Records: [{ cf: { request } }] }
-    lambchop({ cleanUrls: true })(evt, null, spy)
-    expect(spy.args[0][1].status).to.equal('301')
-    expect(spy.args[0][1].headers.location[0].value).to.equal('/')
+    const { args } = run({}, { uri: '/' })
+    expect(args[1].uri).to.equal('/')
   })
 })
 
