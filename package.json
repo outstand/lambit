@@ -31,18 +31,21 @@
   "scripts": {
     "test:lint": "standard --verbose | snazzy",
     "test:unit": "mocha 'src/**/*.test.js' -r babel-register",
-    "test": "npm-run-all test:*",
+    "test": "cross-env NODE_ENV=testing npm-run-all test:*",
     "build": "babel src -d dist --minified --ignore '**/*.test.js'",
     "watch": "npm run build -- -w",
     "prepublish": "npm run test && npm run build"
   },
-  "dependencies": {},
+  "dependencies": {
+    "object-path": "0.11.4"
+  },
   "devDependencies": {
     "babel-cli": "6.24.1",
     "babel-plugin-transform-async-to-generator": "6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "6.24.1",
     "babel-register": "6.24.1",
     "chai": "4.1.1",
+    "cross-env": "5.0.5",
     "mocha": "3.5.0",
     "npm-run-all": "4.0.2",
     "sinon": "3.1.0",
@@ -57,6 +60,8 @@
   },
   "standard": {
     "globals": [
+      "beforeEach",
+      "afterEach",
       "describe",
       "it"
     ]
