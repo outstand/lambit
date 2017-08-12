@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { run, headers } from './helpers'
 
-describe('unit: index (clean urls)', () => {
+describe('integration: cleanUrls', () => {
   it('uses clean urls', async () => {
     const { args } = run({ cleanUrls: true }, { uri: '/hello', headers })
     expect(args[1].uri).to.equal('/hello.html')

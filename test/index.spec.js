@@ -1,7 +1,7 @@
 import { expect } from 'chai'
 import { run } from './helpers'
 
-describe('unit: index', () => {
+describe('integration: index', () => {
   // const now = Date.now()
   // const config1 = {
   //   headers: [

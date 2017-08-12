@@ -1,7 +1,12 @@
 import { STATUS_CODES } from 'http'
 import { get } from 'object-path'
+import { matches } from '../utils/pattern'
 
 export default function (req, res, creds) {
+  if (creds.source && !matches(creds.source, req.uri)) {
+    return
+  }
+
   const authData = get(req, 'headers.authorization.0.value')
   if (!authData) {
     return notAuthorized(res)

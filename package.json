@@ -35,7 +35,7 @@
     "test": "cross-env NODE_ENV=testing npm-run-all test:*",
     "build": "babel src -d dist --minified --ignore '**/*.test.js'",
     "watch": "npm run build -- -w",
-    "prepublish": "npm run test && npm run build"
+    "prepare": "npm run test && npm run build"
   },
   "dependencies": {
     "object-path": "0.11.4"
@@ -49,7 +49,7 @@
     "cross-env": "5.0.5",
     "mocha": "3.5.0",
     "npm-run-all": "4.0.2",
-    "sinon": "3.1.0",
+    "sinon": "3.2.0",
     "snazzy": "7.0.0",
     "standard": "10.0.3"
   },

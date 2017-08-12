@@ -4,6 +4,7 @@ import * as trigger from './utils/trigger'
 // import * as segment from './utils/segment'
 import auth from './components/auth'
 import cleanUrl from './components/clean-url'
+import header from './components/header'
 // import redirect from './components/redirect'
 
 module.exports = (opts = {}) => {
@@ -42,12 +43,12 @@ module.exports = (opts = {}) => {
         }
 
         case 'origin-response': {
-          // headers
           // snippets
           break
         }
 
         case 'viewer-response': {
+          opts.headers.length && header(req, res, opts.headers)
           break
         }
       }
@@ -59,22 +60,6 @@ module.exports = (opts = {}) => {
     }
   }
 }
-
-// function parseHeaders (res, opts) {
-//   if (!Array.isArray(opts.headers)) {
-//     throw new TypeError(`"headers" should be an array, got ${typeof opts.headers}`)
-//   }
-//
-//   res.headers = res.headers || []
-//
-//   for (const data of opts.headers) {
-//     res.headers[data.name.toLowerCase()] = [{
-//       key: data.name,
-//       value: typeof data.value === 'function'
-//         ? data.value() : data.value
-//     }]
-//   }
-// }
 
 // function parseRedirects (req, opts) {
 //   if (!Array.isArray(opts.redirects)) {
