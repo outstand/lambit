@@ -8,7 +8,8 @@ describe('integration: redirects', () => {
       { source: '/greet/{name}/hello', to: '/{name}/hello' },
       { source: '/hello', to: '/whatup', code: 302 },
       { source: '/yo/**', to: '/wazzup/$1' },
-      { source: '/he*/{greeting}-{name}!/**', to: '/$2/{name}' }
+      { source: '/he*/{greeting}-{name}!/**', to: '/$2/{name}' },
+      { source: 'http://mysite.com/{query}/**', to: 'https://google.com/$1/?q={query}' }
     ]
   }
 
@@ -22,6 +23,12 @@ describe('integration: redirects', () => {
     const { args } = run(config, { uri: '/hello', headers })
     expect(args[1].status).to.equal('302')
     expect(args[1].headers.location[0].value).to.equal('/whatup')
+  })
+
+  it('redirects with a hostname', async () => {
+    const { args } = run(config, { uri: 'http://mysite.com/yoyo/search', headers })
+    expect(args[1].status).to.equal('301')
+    expect(args[1].headers.location[0].value).to.equal('https://google.com/search/?q=yoyo')
   })
 
   it('redirects with wildcard', async () => {
