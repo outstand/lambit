@@ -1,9 +1,9 @@
 import { expect } from 'chai'
-import redirect from './redirect'
+import * as redirect from './redirect'
 
 describe('unit: redirect', () => {
-  it('returns object', async () => {
-    const res = redirect('https://google.com')
+  it('redirect', async () => {
+    const res = redirect.redirect('https://google.com')
     expect(res.status).to.equal('301')
     expect(res.statusDescription).to.equal('Moved Permanently')
     expect(res.body).to.equal('Redirecting to https://google.com')
@@ -14,19 +14,19 @@ describe('unit: redirect', () => {
     })
   })
 
-  it('with custom code', async () => {
-    const res = redirect('https://google.com', 302)
+  it('redirect (custom code)', async () => {
+    const res = redirect.redirect('https://google.com', 302)
     expect(res.status).to.equal('302')
     expect(res.statusDescription).to.equal('Found')
   })
 
-  it('with custom code as string', async () => {
-    const res = redirect('https://google.com', '302')
+  it('redirect (custom code as string)', async () => {
+    const res = redirect.redirect('https://google.com', '302')
     expect(res.status).to.equal('302')
     expect(res.statusDescription).to.equal('Found')
   })
 
-  it('with invalid code', async () => {
-    expect(() => redirect('google.com', 400)).to.throw()
+  it('redirect (invalid code)', async () => {
+    expect(() => redirect.redirect('google.com', 400)).to.throw()
   })
 })

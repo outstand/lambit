@@ -1,6 +1,22 @@
 import { STATUS_CODES } from 'http'
+import { matches, extract, render } from '../utils/pattern'
 
-export default function (to, code = 301) {
+export default function (req, res, redirects = []) {
+  for (const data of redirects) {
+    if (!data.source || !data.to) {
+      throw new Error(`Could not find "source" and "to": ${JSON.stringify(data)}`)
+    }
+
+    if (matches(data.source, req.uri)) {
+      const newUrl = render(data.to, extract(req.uri, data.source))
+      Object.assign(res, redirect(newUrl, data.code))
+
+      return
+    }
+  }
+}
+
+export function redirect (to, code = 301) {
   const status = parseInt(code, 10)
 
   if (status < 300 || status > 308) {

@@ -10,9 +10,9 @@ describe('unit: auth', () => {
   })
 
   it('decode', async () => {
-    const creds = { username: 'jason', password: 'password' }
-    expect(auth.decode('Basic amFzb246cGFzc3dvcmQ=')).to.deep.equal(creds)
-    expect(auth.decode('amFzb246cGFzc3dvcmQ=')).to.deep.equal(creds)
-    expect(auth.decode(' basic     amFzb246cGFzc3dvcmQ=')).to.deep.equal(creds)
+    const creds = { username: 'jane', password: 'password' }
+    expect(auth.decode('Basic amFuZTpwYXNzd29yZA==')).to.deep.equal(creds)
+    expect(auth.decode('amFuZTpwYXNzd29yZA==')).to.deep.equal(creds)
+    expect(auth.decode(' basic     amFuZTpwYXNzd29yZA==')).to.deep.equal(creds)
   })
 })

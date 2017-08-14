@@ -12,6 +12,7 @@ describe('integration: headers', () => {
   it('adds custom headers', async () => {
     const res = { status: 200 }
     const { args } = run(config, { uri: '/' }, res)
+    expect(args[1].headers.whatup[0].key).to.equal('Whatup')
     expect(args[1].headers.whatup[0].value).to.equal('yoyo')
     expect(args[1].headers.testing).to.equal(undefined)
   })

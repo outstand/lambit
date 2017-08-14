@@ -2,8 +2,10 @@ import { STATUS_CODES } from 'http'
 import { get } from 'object-path'
 import { matches } from '../utils/pattern'
 
-export default function (req, res, creds) {
-  if (creds.source && !matches(creds.source, req.uri)) {
+export default function (req, res, opts) {
+  if (!opts) return
+
+  if (opts.source && !matches(opts.source, req.uri)) {
     return
   }
 
@@ -13,7 +15,7 @@ export default function (req, res, creds) {
   }
 
   const { username, password } = decode(authData)
-  if (username !== creds.username || password !== creds.password) {
+  if (username !== opts.username || password !== opts.password) {
     return notAuthorized(res)
   }
 }

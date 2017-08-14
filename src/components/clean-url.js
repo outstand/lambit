@@ -1,10 +1,12 @@
 import path from 'path'
-import redirect from './redirect'
+import { redirect } from './redirect'
 
 const PATTERN_HTML = /\.html?$/i
 const PATTERN_INDEX = /index(?:\.html?)?$/i
 
-export default function (req, res) {
+export default function (req, res, opts) {
+  if (!opts) return
+
   if (isDirty(req.uri)) {
     const cleanUrl = cleanup(req.uri)
     Object.assign(res, redirect(cleanUrl))
