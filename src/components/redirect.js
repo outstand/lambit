@@ -32,7 +32,7 @@ export function redirect (to, code = 301) {
         key: 'Location',
         value: to
       }],
-      contentType: [{
+      'content-type': [{
         key: 'Content-Type',
         value: 'text/plain; charset=UTF-8'
       }]

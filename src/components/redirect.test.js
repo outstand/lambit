@@ -7,7 +7,7 @@ describe('unit: redirect', () => {
     expect(res.status).to.equal('301')
     expect(res.statusDescription).to.equal('Moved Permanently')
     expect(res.body).to.equal('Redirecting to https://google.com')
-    expect(res.headers.contentType[0].value).to.match(/^text\/plain/)
+    expect(res.headers['content-type'][0].value).to.match(/^text\/plain/)
     expect(res.headers.location[0]).to.deep.equal({
       key: 'Location',
       value: 'https://google.com'
