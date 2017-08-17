@@ -1,6 +1,6 @@
 {
   "name": "lambchop",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Modern hosting features for Lambda@Edge",
   "author": "Jason Maurer",
   "license": "MIT",
