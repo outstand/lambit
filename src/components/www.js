@@ -1,4 +1,4 @@
-import { get } from 'object-path'
+import { get } from '../utils/deep'
 import { redirect } from './redirect'
 
 const PATTERN_WWW = /^www\./

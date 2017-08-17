@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { run, headers } from './helpers'
+import { originRequest } from './helpers'
 
 describe('integration: rewrites', () => {
   const config = {
@@ -13,64 +13,58 @@ describe('integration: rewrites', () => {
   }
 
   it('rewrites url', async () => {
-    const args = run(config, { uri: '/hi', headers })
+    const args = originRequest(config, '/hi')
     expect(args[1].uri).to.equal('/hey')
   })
 
   it('rewrites url for pushstate', async () => {
-    const args = run({
-      rewrites: [{ source: '/**', to: '/index.html' }]
-    }, { uri: '/hello', headers })
+    const config = { rewrites: [{ source: '/**', to: '/index.html' }] }
+    const args = originRequest(config, '/hello')
     expect(args[1].uri).to.equal('/index.html')
   })
 
   it('rewrites with wildcard', async () => {
-    const args = run(config, { uri: '/yo/yo', headers })
+    const args = originRequest(config, '/yo/yo')
     expect(args[1].uri).to.equal('/wazzup/yo')
   })
 
-  it.skip('stops rewrite without slash', async () => {
-    const args = run({
-      rewrites: [{ source: '/**', to: 'hi' }]
-    }, { uri: '/', headers })
-    expect(args[0]).to.be.instanceof(Error)
-  })
-
   it('rewrites with segment', async () => {
-    const args = run(config, { uri: '/greet/jane/hello', headers })
+    const args = originRequest(config, '/greet/jane/hello')
     expect(args[1].uri).to.equal('/jane/hello')
   })
 
   it('rewrites with crazy url', async () => {
-    const args = run(config, { uri: '/hello/hey-jane!/whatup', headers })
+    const args = originRequest(config, '/hello/hey-jane!/whatup')
     expect(args[1].uri).to.equal('/whatup/jane')
   })
 
   it('stops bad pattern', async () => {
-    const args = run({
-      rewrites: [{ source: '/bad/{greeting}{name}', to: '/{name}' }]
-    }, { uri: '/bad/hi', headers })
+    const config = { rewrites: [{ source: '/bad/{greeting}{name}', to: '/{name}' }] }
+    const args = originRequest(config, '/bad/hi')
     expect(args[0]).to.be.instanceof(Error)
   })
 
   it('prevents double segment', async () => {
-    const args = run({
-      rewrites: [{ source: '/hi/{name}/{name}', to: '/hey/{name}' }]
-    }, { uri: '/hi/jane/jane', headers })
+    const config = { rewrites: [{ source: '/hi/{name}/{name}', to: '/hey/{name}' }] }
+    const args = originRequest(config, '/hi/jane/jane')
     expect(args[0]).to.be.instanceof(Error)
   })
 
   it('prevents bad rewrite object', async () => {
-    const args = run({
-      rewrites: [{ from: '/hi', to: '/hey' }]
-    }, { uri: '/hi', headers })
+    const config = { rewrites: [{ from: '/hi', to: '/hey' }] }
+    const args = originRequest(config, '/hi')
     expect(args[0]).to.be.instanceof(Error)
   })
 
   it('prevents non-existant segment', async () => {
-    const args = run({
-      rewrites: [{ source: '/hi', to: '/hey/{name}' }]
-    }, { uri: '/hi', headers })
+    const config = { rewrites: [{ source: '/hi', to: '/hey/{name}' }] }
+    const args = originRequest(config, '/hi')
+    expect(args[0]).to.be.instanceof(Error)
+  })
+
+  it('errors with no leading slash on source', async () => {
+    const config = { rewrites: [{ source: 'test', to: '/hi' }] }
+    const args = originRequest(config, '/test')
     expect(args[0]).to.be.instanceof(Error)
   })
 })

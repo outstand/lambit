@@ -1,4 +1,4 @@
-import { get } from 'object-path'
+import { get } from './deep'
 
 export default function (req, res) {
   const pattern = /cloudfront/i

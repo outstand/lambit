@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { run, headers } from './helpers'
+import { originRequest } from './helpers'
 
 describe('integration: cleanUrls', () => {
   const config = {
@@ -7,31 +7,39 @@ describe('integration: cleanUrls', () => {
   }
 
   it('uses clean urls with sources (matches)', async () => {
-    const args = run(config, { uri: '/heyo.html', headers })
-    console.log(args)
+    const args = originRequest(config, '/heyo.html')
     expect(args[1].status).to.equal('301')
     expect(args[1].headers.location[0].value).to.equal('/heyo')
   })
 
   it('uses clean urls with sources (does not match)', async () => {
-    const args = run(config, { uri: '/hello', headers })
+    const args = originRequest(config, '/hello')
     expect(args[1].uri).to.equal('/hello')
   })
 
   it('uses clean urls for all', async () => {
-    const args = run({ cleanUrls: true }, { uri: '/hello', headers })
+    const config = { cleanUrls: true }
+    const args = originRequest(config, '/hello')
     expect(args[1].uri).to.equal('/hello.html')
   })
 
   it('uses clean urls with html extension', async () => {
-    const args = run({ cleanUrls: true }, { uri: '/hello.html', headers })
+    const config = { cleanUrls: true }
+    const args = originRequest(config, '/hello.html')
     expect(args[1].status).to.equal('301')
     expect(args[1].headers.location[0].value).to.equal('/hello')
   })
 
   it('uses clean urls with index file', async () => {
-    const args = run({ cleanUrls: true }, { uri: '/index.html', headers })
+    const config = { cleanUrls: true }
+    const args = originRequest(config, '/index.html')
     expect(args[1].status).to.equal('301')
     expect(args[1].headers.location[0].value).to.equal('/')
+  })
+
+  it('errors with no leading slash', async () => {
+    const config = { cleanUrls: ['hi/*'] }
+    const args = originRequest(config, '/hi/hey.html')
+    expect(args[0]).to.be.instanceof(Error)
   })
 })

@@ -1,5 +1,5 @@
 import { STATUS_CODES } from 'http'
-import { get } from 'object-path'
+import { get } from '../utils/deep'
 import { match } from '../utils/pattern'
 
 export default function (req, res, auth) {

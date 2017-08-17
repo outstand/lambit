@@ -23,3 +23,25 @@ export function run (config, request, response) {
 
   return cb.args[0]
 }
+
+export function viewerRequest (config, uri, request) {
+  const req = Object.assign({}, request, { uri })
+  return run(config, req)
+}
+
+export function originRequest (config, uri, request) {
+  const req = Object.assign({}, request, { uri, headers })
+  return run(config, req)
+}
+
+export function originResponse (config, uri, request) {
+  const req = Object.assign({}, request, { uri, headers })
+  const res = { status: 200 }
+  return run(config, req, res)
+}
+
+export function viewerResponse (config, uri, request) {
+  const req = Object.assign({}, request, { uri })
+  const res = { status: 200 }
+  return run(config, req, res)
+}

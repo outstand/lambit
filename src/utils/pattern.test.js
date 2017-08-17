@@ -7,6 +7,15 @@ describe('unit: pattern', () => {
     expect(pattern.escapeRegex('hello**hi')).to.equal('hello\\*\\*hi')
   })
 
+  it('forceLeadingSlash', async () => {
+    expect(() => pattern.forceLeadingSlash('hi')).to.throw(Error)
+    expect(() => pattern.forceLeadingSlash('hi/')).to.throw(Error)
+    expect(() => pattern.forceLeadingSlash(1)).to.throw(Error)
+    expect(() => pattern.forceLeadingSlash('/hi')).to.not.throw()
+    expect(() => pattern.forceLeadingSlash('/')).to.not.throw()
+    expect(() => pattern.forceLeadingSlash(/.*/)).to.not.throw()
+  })
+
   it('match', async () => {
     expect(pattern.match('/*', '/hello')).to.equal(true)
     expect(pattern.match('/**', '/hello')).to.equal(true)
@@ -35,9 +44,11 @@ describe('unit: pattern', () => {
     expect(pattern.match('/hello-{first(name)}', '/hello-jane')).to.equal(false)
     expect(pattern.match(/\.jpg$/, '/hi.jpg')).to.equal(true)
     expect(pattern.match(/\.jpg$/, '/hi.jp')).to.equal(false)
+    expect(() => pattern.match('hi', '/hi')).to.throw(Error)
   })
 
   it('toRegex', async () => {
+    expect(pattern.toRegex('/hello').source).to.equal('^\\/hello$')
     expect(pattern.toRegex('/{name}').source).to.equal('^\\/([^\\/\\s]+)$')
     expect(pattern.toRegex('/{fname}-{lname}').source).to.equal('^\\/([^\\/\\s]+)\\-([^\\/\\s]+)$')
     expect(pattern.toRegex('/hello{name}').source).to.equal('^\\/hello([^\\/\\s]+)$')

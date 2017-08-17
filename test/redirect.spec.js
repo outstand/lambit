@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { run, headers } from './helpers'
+import { originRequest } from './helpers'
 
 describe('integration: redirects', () => {
   const config = {
@@ -9,87 +9,89 @@ describe('integration: redirects', () => {
       { source: '/hello', to: '/whatup', code: 302 },
       { source: '/yo/**', to: '/wazzup/$1' },
       { source: '/he*/{greeting}-{name}!/**', to: '/$2/{name}' },
-      { source: 'http://mysite.com/{query}/**', to: 'https://google.com/$1/?q={query}' }
+      { source: '/{query}/**', to: 'https://google.com/$1/?q={query}' }
     ]
   }
 
   it('sends redirect response', async () => {
-    const args = run(config, { uri: '/hi', headers })
+    const args = originRequest(config, '/hi')
     expect(args[1].status).to.equal('301')
     expect(args[1].headers.location[0].value).to.equal('/hey')
   })
 
   it('redirects with custom code', async () => {
-    const args = run(config, { uri: '/hello', headers })
+    const args = originRequest(config, '/hello')
     expect(args[1].status).to.equal('302')
     expect(args[1].headers.location[0].value).to.equal('/whatup')
   })
 
   it('redirects with a hostname', async () => {
-    const args = run(config, { uri: 'http://mysite.com/yoyo/search', headers })
+    const args = originRequest(config, '/yoyo/search')
     expect(args[1].status).to.equal('301')
     expect(args[1].headers.location[0].value).to.equal('https://google.com/search/?q=yoyo')
   })
 
   it('redirects with wildcard', async () => {
-    const args = run(config, { uri: '/yo/yo', headers })
+    const args = originRequest(config, '/yo/yo')
     expect(args[1].status).to.equal('301')
     expect(args[1].headers.location[0].value).to.equal('/wazzup/yo')
   })
 
   it('redirects with segment', async () => {
-    const args = run(config, { uri: '/greet/jane/hello', headers })
+    const args = originRequest(config, '/greet/jane/hello')
     expect(args[1].status).to.equal('301')
     expect(args[1].headers.location[0].value).to.equal('/jane/hello')
   })
 
   it('redirects with crazy url', async () => {
-    const args = run(config, { uri: '/hello/hey-jane!/whatup', headers })
+    const args = originRequest(config, '/hello/hey-jane!/whatup')
     expect(args[1].status).to.equal('301')
     expect(args[1].headers.location[0].value).to.equal('/whatup/jane')
   })
 
   it('stops bad pattern', async () => {
-    const args = run({
-      redirects: [{ source: '/bad/{greeting}{name}', to: '/{name}' }]
-    }, { uri: '/bad/hi', headers })
+    const config = { redirects: [{ source: '/bad/{greeting}{name}', to: '/{name}' }] }
+    const args = originRequest(config, '/bad/hi')
     expect(args[0]).to.be.instanceof(Error)
   })
 
   it('prevents double segment', async () => {
-    const args = run({
-      redirects: [{ source: '/hi/{name}/{name}', to: '/hey/{name}' }]
-    }, { uri: '/hi/jane/jane', headers })
+    const config = { redirects: [{ source: '/hi/{name}/{name}', to: '/hey/{name}' }] }
+    const args = originRequest(config, '/hi/jane/jane')
     expect(args[0]).to.be.instanceof(Error)
   })
 
   it('prevents bad redirect object', async () => {
-    const args = run({
-      redirects: [{ from: '/hi', to: '/hey' }]
-    }, { uri: '/hi', headers })
+    const config = { redirects: [{ from: '/hi', to: '/hey' }] }
+    const args = originRequest(config, '/hi')
     expect(args[0]).to.be.instanceof(Error)
   })
 
   it('prevents reserved segment', async () => {
-    const args = run({
-      redirects: [{ source: '/hi/{length}', to: '/hey/{length}' }]
-    }, { uri: '/hi/jane', headers })
+    const config = { redirects: [{ source: '/hi/{length}', to: '/hey/{length}' }] }
+    const args = originRequest(config, '/hi/jane')
     expect(args[0]).to.be.instanceof(Error)
   })
 
   it('prevents non-existant segment', async () => {
-    const args = run({
-      redirects: [{ source: '/hi', to: '/hey/{name}' }]
-    }, { uri: '/hi', headers })
+    const config = { redirects: [{ source: '/hi', to: '/hey/{name}' }] }
+    const args = originRequest(config, '/hi')
     expect(args[0]).to.be.instanceof(Error)
   })
 
   it('does not append html to result url', async () => {
-    const args = run({
+    const config = {
       cleanUrls: true,
       redirects: [{ source: '/hi/**', to: '/hey/$1' }]
-    }, { uri: '/hi/test', headers })
+    }
+    const args = originRequest(config, '/hi/test')
     expect(args[1].status).to.equal('301')
     expect(args[1].headers.location[0].value).to.equal('/hey/test')
+  })
+
+  it('errors with no leading slash on source', async () => {
+    const config = { redirects: [{ source: 'test', to: '/hi' }] }
+    const args = originRequest(config, '/test')
+    expect(args[0]).to.be.instanceof(Error)
   })
 })

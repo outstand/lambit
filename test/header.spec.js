@@ -1,5 +1,5 @@
 import { expect } from 'chai'
-import { run } from './helpers'
+import { viewerResponse } from './helpers'
 
 describe('integration: headers', () => {
   const config = {
@@ -10,25 +10,27 @@ describe('integration: headers', () => {
   }
 
   it('adds custom headers', async () => {
-    const res = { status: 200 }
-    const args = run(config, { uri: '/' }, res)
+    const args = viewerResponse(config, '/')
     expect(args[1].headers.whatup[0].key).to.equal('Whatup')
     expect(args[1].headers.whatup[0].value).to.equal('yoyo')
     expect(args[1].headers.testing).to.equal(undefined)
   })
 
   it('stops invalid header name', async () => {
-    const res = { status: 200 }
-    const args = run({
-      headers: [{ name: 'yo@yo', value: 'hi' }]
-    }, { uri: '/' }, res)
+    const config = { headers: [{ name: 'yo@yo', value: 'hi' }] }
+    const args = viewerResponse(config, '/')
     expect(args[0]).to.be.instanceof(Error)
   })
 
   it('adds custom headers with source', async () => {
-    const res = { status: 200 }
-    const args = run(config, { uri: '/admin' }, res)
+    const args = viewerResponse(config, '/admin')
     expect(args[1].headers.whatup[0].value).to.equal('yoyo')
     expect(args[1].headers.testing[0].value).to.equal('Hello')
+  })
+
+  it('errors with no leading slash on source', async () => {
+    const config = { headers: [{ name: 'hi', value: 'hi', source: 'test' }] }
+    const args = viewerResponse(config, '/test')
+    expect(args[0]).to.be.instanceof(Error)
   })
 })

@@ -1,5 +1,5 @@
 import xregexp from 'xregexp'
-import { get } from 'object-path'
+import { get } from './deep'
 
 const PATTERN_ESCAPE = /[-/\\^$*+?.()|[\]{}]/g
 const PATTERN_SEGMENT = /\\{([a-zA-Z0-9_]+)\\}/g
@@ -11,7 +11,19 @@ export function escapeRegex (str = '') {
     .replace(PATTERN_ESCAPE, '\\$&')
 }
 
+export function forceLeadingSlash (str) {
+  if (str instanceof RegExp) {
+    return
+  }
+
+  if (typeof str !== 'string' || str.charAt(0) !== '/') {
+    throw new Error(`Pattern must start with a forward slash: ${str}`)
+  }
+}
+
 export function match (pattern, url) {
+  forceLeadingSlash(pattern)
+
   const regex = pattern instanceof RegExp
     ? pattern : toRegex(pattern)
 
