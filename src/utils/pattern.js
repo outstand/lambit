@@ -11,7 +11,7 @@ export function escapeRegex (str = '') {
     .replace(PATTERN_ESCAPE, '\\$&')
 }
 
-export function matches (pattern, url) {
+export function match (pattern, url) {
   const regex = pattern instanceof RegExp
     ? pattern : toRegex(pattern)
 

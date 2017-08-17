@@ -11,7 +11,7 @@ describe('integration: headers', () => {
 
   it('adds custom headers', async () => {
     const res = { status: 200 }
-    const { args } = run(config, { uri: '/' }, res)
+    const args = run(config, { uri: '/' }, res)
     expect(args[1].headers.whatup[0].key).to.equal('Whatup')
     expect(args[1].headers.whatup[0].value).to.equal('yoyo')
     expect(args[1].headers.testing).to.equal(undefined)
@@ -19,7 +19,7 @@ describe('integration: headers', () => {
 
   it('stops invalid header name', async () => {
     const res = { status: 200 }
-    const { args } = run({
+    const args = run({
       headers: [{ name: 'yo@yo', value: 'hi' }]
     }, { uri: '/' }, res)
     expect(args[0]).to.be.instanceof(Error)
@@ -27,7 +27,7 @@ describe('integration: headers', () => {
 
   it('adds custom headers with source', async () => {
     const res = { status: 200 }
-    const { args } = run(config, { uri: '/admin' }, res)
+    const args = run(config, { uri: '/admin' }, res)
     expect(args[1].headers.whatup[0].value).to.equal('yoyo')
     expect(args[1].headers.testing[0].value).to.equal('Hello')
   })

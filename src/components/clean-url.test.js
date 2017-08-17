@@ -2,17 +2,24 @@ import { expect } from 'chai'
 import * as clean from './clean-url'
 
 describe('unit: clean-url', () => {
+  it('default', async () => {
+    expect(() => clean.default({}, {}, 'hi')).to.throw(TypeError)
+  })
+
   it('isDirty', async () => {
     expect(clean.isDirty('/hello.html')).to.equal(true)
     expect(clean.isDirty('/hello.htm')).to.equal(true)
+    expect(clean.isDirty('/hello.htmll')).to.equal(false)
+    expect(clean.isDirty('/hello.ht')).to.equal(false)
     expect(clean.isDirty('/hello')).to.equal(false)
     expect(clean.isDirty('/hello/')).to.equal(false)
+    expect(clean.isDirty('/hello.')).to.equal(false)
     expect(clean.isDirty('/hello.css')).to.equal(false)
     expect(clean.isDirty('/index.html')).to.equal(true)
     expect(clean.isDirty('/index.htm')).to.equal(true)
+    expect(clean.isDirty('/index.css')).to.equal(false)
     expect(clean.isDirty('/index')).to.equal(true)
     expect(clean.isDirty('/index/')).to.equal(false)
-    expect(clean.isDirty('/index.css')).to.equal(false)
   })
 
   it('cleanup', async () => {

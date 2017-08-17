@@ -1,44 +1,57 @@
 import { get } from 'object-path'
 import { error } from './utils/logger'
-import { findType } from './utils/trigger'
+import trigger from './utils/trigger'
 import www from './components/www'
 import auth from './components/auth'
-import cleanUrls from './components/clean-url'
-import headers from './components/header'
 import redirects from './components/redirect'
 import rewrites from './components/rewrite'
+import cleanUrls from './components/clean-url'
+import headers from './components/header'
 
 module.exports = (opts = {}) => {
-  // TODO: validate all options
+  // TODO: slashify all patterns and destinations
 
-  return async (evt, ctx, cb) => {
+  return (evt, ctx, cb) => {
     try {
+      /* get the data passed in by cloudfront */
       const {
         request: req = {},
         response: res = {}
       } = get(evt, 'Records.0.cf', {})
 
-      switch (findType(req, res)) {
+      /* find the cloudfront event type, */
+      /* since different actions take place in each one */
+      switch (trigger(req, res)) {
         case 'viewer-request': {
           www(req, res, opts.www)
-          auth(req, res, opts.auth || false)
+          auth(req, res, opts.auth)
+
           break
         }
 
         case 'origin-request': {
-          cleanUrls(req, res, opts.cleanUrls || false)
-          redirects(req, res, opts.redirects || [])
-          rewrites(req, res, opts.rewrites || [])
+          redirects(req, res, opts.redirects)
+          rewrites(req, res, opts.rewrites)
+
+          /**
+           * this should stay last in line so
+           * ".html" doesn't get appended to
+           * the redirect/rewrite rules
+           */
+          cleanUrls(req, res, opts.cleanUrls)
+
           break
         }
 
         case 'origin-response': {
           /* nothing needed in this trigger yet */
+
           break
         }
 
         case 'viewer-response': {
-          headers(req, res, opts.headers || [])
+          headers(req, res, opts.headers)
+
           break
         }
       }

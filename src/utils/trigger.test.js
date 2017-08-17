@@ -2,19 +2,19 @@ import { expect } from 'chai'
 import * as trigger from './trigger'
 
 describe('unit: trigger', () => {
-  it('findType', async () => {
-    const request = {
+  it('default', async () => {
+    const cfRequest = {
       headers: {
         'user-agent': [{ value: 'Amazon CloudFront' }],
         via: [{ value: '1.1 12345.cloudfront.net (CloudFront), 1.1  (CloudFront)' }]
       }
     }
-    const response = {
+    const cfResponse = {
       status: 200
     }
-    expect(trigger.findType({})).to.equal('viewer-request')
-    expect(trigger.findType({}, response)).to.equal('viewer-response')
-    expect(trigger.findType(request)).to.equal('origin-request')
-    expect(trigger.findType(request, response)).to.equal('origin-response')
+    expect(trigger.default({})).to.equal('viewer-request')
+    expect(trigger.default({}, cfResponse)).to.equal('viewer-response')
+    expect(trigger.default(cfRequest)).to.equal('origin-request')
+    expect(trigger.default(cfRequest, cfResponse)).to.equal('origin-response')
   })
 })

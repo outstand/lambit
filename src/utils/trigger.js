@@ -1,6 +1,6 @@
 import { get } from 'object-path'
 
-export function findType (req, res) {
+export default function (req, res) {
   const pattern = /cloudfront/i
 
   const via = get(req, 'headers.via.0.value')

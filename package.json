@@ -43,7 +43,6 @@
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",
-    "babel-plugin-transform-async-to-generator": "6.24.1",
     "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
     "babel-register": "6.26.0",
     "chai": "4.1.1",
@@ -56,7 +55,6 @@
   },
   "babel": {
     "plugins": [
-      "transform-async-to-generator",
       "transform-es2015-modules-commonjs"
     ]
   },
