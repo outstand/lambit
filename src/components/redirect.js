@@ -1,10 +1,10 @@
 import { STATUS_CODES } from 'http'
 import { matches, extract, render } from '../utils/pattern'
 
-export default function (req, res, redirects = []) {
+export default function (req, res, redirects) {
   for (const data of redirects) {
     if (!data.source || !data.to) {
-      throw new Error(`Could not find "source" and "to": ${JSON.stringify(data)}`)
+      throw new Error(`Could not find "source" and "to" in redirect: ${JSON.stringify(data)}`)
     }
 
     if (matches(data.source, req.uri)) {

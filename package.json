@@ -42,10 +42,10 @@
     "xregexp": "3.2.0"
   },
   "devDependencies": {
-    "babel-cli": "6.24.1",
+    "babel-cli": "^6.26.0",
     "babel-plugin-transform-async-to-generator": "6.24.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "6.24.1",
-    "babel-register": "6.24.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
+    "babel-register": "6.26.0",
     "chai": "4.1.1",
     "cross-env": "5.0.5",
     "mocha": "3.5.0",

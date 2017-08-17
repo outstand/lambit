@@ -1,6 +1,6 @@
 import { matches } from '../utils/pattern'
 
-export default function (req, res, headers = []) {
+export default function (req, res, headers) {
   res.headers = res.headers || []
 
   for (const data of headers) {

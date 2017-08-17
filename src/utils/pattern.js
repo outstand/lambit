@@ -2,7 +2,7 @@ import xregexp from 'xregexp'
 import { get } from 'object-path'
 
 const PATTERN_ESCAPE = /[-/\\^$*+?.()|[\]{}]/g
-const PATTERN_SEGMENT = /\\{([a-zA-Z0-9_-]+)\\}/g
+const PATTERN_SEGMENT = /\\{([a-zA-Z0-9_]+)\\}/g
 const PATTERN_WILDCARD_SINGLE = /\\\*/g
 const PATTERN_WILDCARD_DOUBLE = /\\\*\\\*/g
 

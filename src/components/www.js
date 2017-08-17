@@ -3,6 +3,8 @@ import { redirect } from './redirect'
 
 const PATTERN_WWW = /^www\./
 
+// TODO: keep protocol with `headers.upgrade-insecure-request`?
+
 export default function (req, res, toWww) {
   if (toWww === undefined) return
 
@@ -17,6 +19,4 @@ export default function (req, res, toWww) {
     const newHost = host.replace(PATTERN_WWW, '')
     return Object.assign(res, redirect(`${newHost}${req.uri}`))
   }
-
-  // TODO: keep protocol with `headers.upgrade-insecure-request`?
 }
