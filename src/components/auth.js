@@ -2,17 +2,17 @@ import { STATUS_CODES } from 'http'
 import { get } from '../utils/deep'
 import { match } from '../utils/pattern'
 
-export default function (req, res, auth) {
-  if (!auth) {
+export default function (req, res, data) {
+  if (!data) {
     return
   }
 
-  if (typeof auth !== 'object') {
+  if (typeof data !== 'object') {
     throw new TypeError('"auth" must be an object')
   }
 
   /* skip if route doesn't match (if there's a source) */
-  if (auth.source && !match(auth.source, req.uri)) {
+  if (data.source && !match(data.source, req.uri)) {
     return
   }
 
@@ -28,7 +28,7 @@ export default function (req, res, auth) {
   const { username, password } = decode(authData)
 
   /* verify credentials */
-  if (username !== auth.username || password !== auth.password) {
+  if (username !== data.username || password !== data.password) {
     return notAuthorized(res)
   }
 }

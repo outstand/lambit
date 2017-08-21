@@ -2,68 +2,74 @@ import { expect } from 'chai'
 import { originRequest } from './helpers'
 
 describe('integration: rewrites', () => {
-  const config = {
-    rewrites: [
-      { source: '/hi', to: '/hey' },
-      { source: '/greet/{name}/hello', to: '/{name}/hello' },
-      { source: '/hello', to: '/whatup', code: 302 },
-      { source: '/yo/**', to: '/wazzup/$1' },
-      { source: '/he*/{greeting}-{name}!/**', to: '/$2/{name}' }
-    ]
-  }
-
   it('rewrites url', async () => {
-    const args = originRequest(config, '/hi')
-    expect(args[1].uri).to.equal('/hey')
+    const config = { rewrites: [{ source: '/foo', to: '/bar' }] }
+    const args = originRequest(config, '/foo')
+    expect(args[1].uri).to.equal('/bar')
   })
 
   it('rewrites url for pushstate', async () => {
-    const config = { rewrites: [{ source: '/**', to: '/index.html' }] }
-    const args = originRequest(config, '/hello')
+    const config = { rewrites: [{ source: '/*', to: '/index.html' }] }
+    const args = originRequest(config, '/foo/bar')
     expect(args[1].uri).to.equal('/index.html')
   })
 
   it('rewrites with wildcard', async () => {
-    const args = originRequest(config, '/yo/yo')
-    expect(args[1].uri).to.equal('/wazzup/yo')
+    const config = { rewrites: [{ source: '/bar/*', to: '/baz' }] }
+    const args = originRequest(config, '/bar/baz')
+    expect(args[1].uri).to.equal('/baz')
   })
 
   it('rewrites with segment', async () => {
-    const args = originRequest(config, '/greet/jane/hello')
-    expect(args[1].uri).to.equal('/jane/hello')
+    const config = { rewrites: [{ source: '/foo/{name}/bar', to: '/{name}/baz' }] }
+    const args = originRequest(config, '/foo/jane/bar')
+    expect(args[1].uri).to.equal('/jane/baz')
+  })
+
+  it('rewrites with wildcard segment', async () => {
+    const config = { rewrites: [{ source: '/foo/{name+}', to: '/{name}/baz' }] }
+    const args = originRequest(config, '/foo/jane/doe/bar/baz')
+    expect(args[1].uri).to.equal('/jane/doe/bar/baz/baz')
+  })
+
+  it('rewrites with optional segment', async () => {
+    const config = { rewrites: [{ source: '/foo/{name?}', to: '/bar/{name}' }] }
+    const args = originRequest(config, '/foo/')
+    expect(args[1].uri).to.equal('/bar/')
   })
 
   it('rewrites with crazy url', async () => {
-    const args = originRequest(config, '/hello/hey-jane!/whatup')
-    expect(args[1].uri).to.equal('/whatup/jane')
+    const config = { rewrites: [{ source: '/he*/{greet}-{name+}!/*', to: '/{greet}/{name}' }] }
+    const args = originRequest(config, '/hello/hey-jane-doe!/foo')
+    expect(args[1].uri).to.equal('/hey/jane-doe')
+  })
+
+  it('non-existant segment', async () => {
+    const config = { rewrites: [{ source: '/foo', to: '/bar/{name}' }] }
+    const args = originRequest(config, '/foo')
+    expect(args[1].uri).to.equal('/bar/')
   })
 
   it('stops bad pattern', async () => {
-    const config = { rewrites: [{ source: '/bad/{greeting}{name}', to: '/{name}' }] }
-    const args = originRequest(config, '/bad/hi')
+    const config = { rewrites: [{ source: '/bad/{foo}{bar}', to: '/{bar}' }] }
+    const args = originRequest(config, '/bad/foobar')
     expect(args[0]).to.be.instanceof(Error)
   })
 
   it('prevents double segment', async () => {
-    const config = { rewrites: [{ source: '/hi/{name}/{name}', to: '/hey/{name}' }] }
-    const args = originRequest(config, '/hi/jane/jane')
+    const config = { rewrites: [{ source: '/{name}/{name}', to: '/foo/{name}' }] }
+    const args = originRequest(config, '/jane/doe')
     expect(args[0]).to.be.instanceof(Error)
   })
 
-  it('prevents bad rewrite object', async () => {
-    const config = { rewrites: [{ from: '/hi', to: '/hey' }] }
-    const args = originRequest(config, '/hi')
-    expect(args[0]).to.be.instanceof(Error)
+  it('ignores bad rewrite object', async () => {
+    const config = { rewrites: [{ from: '/foo', to: '/bar' }] }
+    const args = originRequest(config, '/foo')
+    expect(args[1].uri).to.equal('/foo')
   })
 
-  it('prevents non-existant segment', async () => {
-    const config = { rewrites: [{ source: '/hi', to: '/hey/{name}' }] }
-    const args = originRequest(config, '/hi')
-    expect(args[0]).to.be.instanceof(Error)
-  })
-
-  it('errors with no leading slash on source', async () => {
-    const config = { rewrites: [{ source: 'test', to: '/hi' }] }
+  it.skip('errors with no leading slash on source', async () => {
+    const config = { redirects: [{ source: 'test', to: '/hi' }] }
     const args = originRequest(config, '/test')
     expect(args[0]).to.be.instanceof(Error)
   })

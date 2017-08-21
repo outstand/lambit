@@ -1,5 +1,5 @@
 import path from 'path'
-import { match } from '../utils/pattern'
+import { findMatch } from '../utils/pattern'
 import { redirect } from './redirect'
 
 const PATTERN_HTML = /\.html?$/i
@@ -16,18 +16,11 @@ export default function (req, res, clean) {
 
   /* if we have sources, make sure one of them matches url */
   if (Array.isArray(clean)) {
-    let hasMatch = false
-
-    /* check each source for a match, stopping if one is found */
-    for (const source of clean) {
-      if (match(source, req.uri)) {
-        hasMatch = true
-        break
-      }
-    }
+    /* check if the uri is a match for one of the patterns */
+    const match = findMatch(clean, req.uri)
 
     /* no match was found, abort cleanup */
-    if (!hasMatch) {
+    if (!match) {
       return
     }
   }

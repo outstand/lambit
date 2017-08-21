@@ -27,10 +27,4 @@ describe('integration: headers', () => {
     expect(args[1].headers.whatup[0].value).to.equal('yoyo')
     expect(args[1].headers.testing[0].value).to.equal('Hello')
   })
-
-  it('errors with no leading slash on source', async () => {
-    const config = { headers: [{ name: 'hi', value: 'hi', source: 'test' }] }
-    const args = viewerResponse(config, '/test')
-    expect(args[0]).to.be.instanceof(Error)
-  })
 })

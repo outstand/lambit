@@ -4,7 +4,7 @@ import { viewerRequest } from './helpers'
 describe('integration: auth (basic)', () => {
   const config = {
     auth: {
-      source: '/admin**',
+      source: '/admin*',
       username: 'jason',
       password: 'password'
     }
@@ -45,20 +45,8 @@ describe('integration: auth (basic)', () => {
     expect(args[1].body).to.match(/not authorized/)
   })
 
-  it('ignores unmatched path', async () => {
+  it('does not prompt with unmatched path', async () => {
     const args = viewerRequest(config, '/')
     expect(args[1].uri).to.equal('/')
-  })
-
-  it('ignores unmatched subpath', async () => {
-    const config = { auth: { source: '/test*' } }
-    const args = viewerRequest(config, '/test/hi')
-    expect(args[1].uri).to.equal('/test/hi')
-  })
-
-  it('errors with no leading slash on source', async () => {
-    const config = { auth: { source: 'test' } }
-    const args = viewerRequest(config, '/test')
-    expect(args[0]).to.be.instanceof(Error)
   })
 })

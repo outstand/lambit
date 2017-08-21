@@ -1,29 +1,22 @@
 import { STATUS_CODES } from 'http'
-import { match, extract, render } from '../utils/pattern'
+import pattern, { findMatch } from '../utils/pattern'
 
 export default function (req, res, redirects = []) {
   if (!Array.isArray(redirects)) {
     throw new TypeError('"redirects" must be an array')
   }
 
+  /* strip out each source pattern */
+  const sources = redirects.map(i => i.source)
   /* go through each redirect and look for a match */
-  for (const data of redirects) {
-    /* make sure object structure is correct */
-    if (!data.source || !data.to) {
-      throw new TypeError(`Could not find "source" and "to" in redirect: ${JSON.stringify(data)}`)
-    }
+  const match = findMatch(sources, req.uri)
 
-    /* match url against pattern */
-    if (match(data.source, req.uri)) {
-      /* match found, convert to new pattern */
-      const newUrl = render(data.to, extract(req.uri, data.source))
+  if (match) {
+    /* match found, convert to new pattern and redirect */
+    const data = redirects[match.index]
+    const rendered = pattern(data.source, data.to, req.uri)
 
-      /* send early-response redirect */
-      Object.assign(res, redirect(newUrl, data.code))
-
-      /* quit looking for more matches */
-      return
-    }
+    Object.assign(res, redirect(rendered, data.code))
   }
 }
 

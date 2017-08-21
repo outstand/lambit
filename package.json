@@ -37,9 +37,7 @@
     "watch": "npm run build -- -w",
     "prepare": "npm run test && npm run build"
   },
-  "dependencies": {
-    "xregexp": "3.2.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "babel-cli": "6.26.0",
     "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
@@ -48,7 +46,7 @@
     "cross-env": "5.0.5",
     "mocha": "3.5.0",
     "npm-run-all": "4.0.2",
-    "sinon": "3.2.0",
+    "sinon": "3.2.1",
     "snazzy": "7.0.0",
     "standard": "10.0.3"
   },
@@ -59,8 +57,6 @@
   },
   "standard": {
     "globals": [
-      "beforeEach",
-      "afterEach",
       "describe",
       "it"
     ]

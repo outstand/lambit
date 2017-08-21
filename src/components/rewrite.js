@@ -1,24 +1,18 @@
-import { match, extract, render } from '../utils/pattern'
+import pattern, { findMatch } from '../utils/pattern'
 
 export default function (req, res, rewrites = []) {
   if (!Array.isArray(rewrites)) {
     throw new TypeError('"rewrites" must be an array')
   }
 
+  /* strip out each source pattern */
+  const sources = rewrites.map(i => i.source)
   /* go through each rewrite and look for a match */
-  for (const data of rewrites) {
-    /* make sure object structure is correct */
-    if (!data.source || !data.to) {
-      throw new Error(`Could not find "source" and "to" in rewrite: ${JSON.stringify(data)}`)
-    }
+  const match = findMatch(sources, req.uri)
 
-    /* match url against pattern */
-    if (match(data.source, req.uri)) {
-      /* match found, use new uri for origin lookup */
-      req.uri = render(data.to, extract(req.uri, data.source))
-
-      /* quit looking for more matches */
-      return
-    }
+  if (match) {
+    /* match found, render and use new uri for origin lookup */
+    const data = rewrites[match.index]
+    req.uri = pattern(data.source, data.to, req.uri)
   }
 }

@@ -3,7 +3,7 @@ import { originRequest } from './helpers'
 
 describe('integration: cleanUrls', () => {
   const config = {
-    cleanUrls: ['/hi/**', '/hey*']
+    cleanUrls: ['/foo', '/hey*']
   }
 
   it('uses clean urls with sources (matches)', async () => {
@@ -35,11 +35,5 @@ describe('integration: cleanUrls', () => {
     const args = originRequest(config, '/index.html')
     expect(args[1].status).to.equal('301')
     expect(args[1].headers.location[0].value).to.equal('/')
-  })
-
-  it('errors with no leading slash', async () => {
-    const config = { cleanUrls: ['hi/*'] }
-    const args = originRequest(config, '/hi/hey.html')
-    expect(args[0]).to.be.instanceof(Error)
   })
 })
