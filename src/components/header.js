@@ -11,7 +11,7 @@ export default function (req, res, headers = []) {
   /* set our server header (it can be overwritten) */
   res.headers.server = [{
     key: 'Server',
-    value: 'Lambchop'
+    value: 'Lambit'
   }]
 
   /* analyze each custom response header */

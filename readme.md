@@ -1,4 +1,4 @@
-# Lambchop [![Build Status](https://travis-ci.org/jsonmaur/lambchop.svg?branch=master)](https://travis-ci.org/jsonmaur/lambchop)
+# Lambit [![Build Status](https://travis-ci.org/jsonmaur/lambit.svg?branch=master)](https://travis-ci.org/jsonmaur/lambit)
 
 A suite of modern hosting features for running static websites on AWS with Lambda@Edge functions. This library lets you mimic the functionality of static hosting services with things such as pushState routing and custom redirects, but with the power of CloudFront and Lambda running in your own AWS account. **Total control for a fraction of the cost.**
 
@@ -7,19 +7,19 @@ If you're not familiar with Lambda@Edge, read up on it [here](https://aws.amazon
 ## Install
 
 ```bash
-$ npm install -S lambchop
+$ npm install -S lambit
 ```
 
-> *Note: You need to bundle the `lambchop` dependency along with your Lambda function code before uploading to AWS. Check out [node-lambda](https://github.com/motdotla/node-lambda) for a quick way to bundle and deploy.*
+> *Note: You need to bundle the `lambit` dependency along with your Lambda function code before uploading to AWS. Check out [node-lambda](https://github.com/motdotla/node-lambda) for a quick way to bundle and deploy.*
 
 ## Getting Started
 
-After you create your AWS Lambda function with a Node.js runtime, simply call `lambchop` with your config object in place of the usual function code. It will handle everything related to the event for you.
+After you create your AWS Lambda function with a Node.js runtime, simply call `lambit` with your config object in place of the usual function code. It will handle everything related to the event for you.
 
 ```javascript
-const lambchop = require('lambchop')
+const lambit = require('lambit')
 
-exports.handler = lambchop({
+exports.handler = lambit({
   cleanUrls: true,
   rewrites: [
     { source: '/*', to: '/index.html' }
@@ -30,13 +30,13 @@ exports.handler = lambchop({
 You will need to attach this function to three out of the four triggers on your CloudFront distribution:  
 `viewer-request` `origin-request` `viewer-response`
 
-If you want to write some custom code in your Lambda function to run alongside Lambchop, just initialize it inside your function after you've done your thing:
+If you want to write some custom code in your Lambda function to run alongside Lambit, just initialize it inside your function after you've done your thing:
 
 ```javascript
 exports.handler = (event, context, callback) => {
     /* custom code goes here */
 
-    lambchop({
+    lambit({
       cleanUrls: true,
       rewrites: [
         { source: '/*', to: '/index.html' }
@@ -47,7 +47,7 @@ exports.handler = (event, context, callback) => {
 
 ## API
 
-#### lambchop (config: Object)
+#### lambit (config: Object)
 
 - `cleanUrls`
 

@@ -1,13 +1,13 @@
 {
-  "name": "lambchop",
+  "name": "lambit",
   "version": "0.3.0",
   "description": "Static hosting features for Lambda@Edge",
   "author": "Jason Maurer",
   "license": "MIT",
-  "homepage": "https://github.com/jsonmaur/lambchop#readme",
+  "homepage": "https://github.com/jsonmaur/lambit#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jsonmaur/lambchop.git"
+    "url": "git+https://github.com/jsonmaur/lambit.git"
   },
   "engines": {},
   "keywords": [
@@ -45,7 +45,9 @@
   "devDependencies": {
     "babel-cli": "6.26.0",
     "babel-plugin-transform-async-to-generator": "6.24.1",
+    "babel-plugin-transform-es2015-destructuring": "6.23.0",
     "babel-plugin-transform-es2015-modules-commonjs": "6.26.0",
+    "babel-plugin-transform-es2015-parameters": "6.24.1",
     "babel-register": "6.26.0",
     "chai": "4.1.1",
     "cross-env": "5.0.5",
@@ -58,7 +60,9 @@
   "babel": {
     "plugins": [
       "transform-es2015-modules-commonjs",
-      "transform-async-to-generator"
+      "transform-async-to-generator",
+      "transform-es2015-parameters",
+      "transform-es2015-destructuring"
     ]
   },
   "standard": {

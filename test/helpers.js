@@ -1,5 +1,5 @@
 import sinon from 'sinon'
-import lambchop from '../src'
+import lambit from '../src'
 
 /**
  * headers that simulate a cloudfront origin request
@@ -19,7 +19,7 @@ export function run (config, request, response) {
   const evt = { Records: [{ cf: { request, response } }] }
   const ctx = {}
 
-  lambchop(config)(evt, ctx, cb)
+  lambit(config)(evt, ctx, cb)
 
   return cb.args[0]
 }
