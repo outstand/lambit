@@ -1,5 +1,10 @@
 import { get } from './deep'
 
+/**
+ * Returns the type of CloudFront trigger
+ * that the Lambda function currently
+ * running is attached to.
+ */
 export default function (req, res) {
   const pattern = /cloudfront/i
 

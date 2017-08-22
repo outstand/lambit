@@ -14,6 +14,7 @@ describe('integration: headers', () => {
     expect(args[1].headers.whatup[0].key).to.equal('Whatup')
     expect(args[1].headers.whatup[0].value).to.equal('yoyo')
     expect(args[1].headers.testing).to.equal(undefined)
+    expect(args[1].headers.server[0].value).to.equal('Lambchop')
   })
 
   it('stops invalid header name', async () => {

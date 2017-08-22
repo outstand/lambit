@@ -5,19 +5,19 @@ import { redirect } from './redirect'
 const PATTERN_HTML = /\.html?$/i
 const PATTERN_INDEX = /index(?:\.html?)?$/i
 
-export default function (req, res, clean) {
-  if (!clean) {
+export default function (req, res, data) {
+  if (!data) {
     return
   }
 
-  if (typeof clean !== 'boolean' && !Array.isArray(clean)) {
+  if (typeof data !== 'boolean' && !Array.isArray(data)) {
     throw new TypeError('"cleanUrls" must be a boolean or an array')
   }
 
   /* if we have sources, make sure one of them matches url */
-  if (Array.isArray(clean)) {
+  if (Array.isArray(data)) {
     /* check if the uri is a match for one of the patterns */
-    const match = findMatch(clean, req.uri)
+    const match = findMatch(data, req.uri)
 
     /* no match was found, abort cleanup */
     if (!match) {

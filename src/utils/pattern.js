@@ -14,7 +14,7 @@ export function getRegex (pattern) {
 
 export function escape (str = '') {
   /**
-   * NOTE: intentially not escaping "-", since it
+   * NOTE: intentionally not escaping "-", since it
    * results in linting errors when it's escaped and
    * not in a character class "[-]". since character
    * classes are escaped, we can get away with not

@@ -1,9 +1,9 @@
 import { expect } from 'chai'
 import { viewerRequest } from './helpers'
 
-describe('integration: auth (basic)', () => {
+describe('integration: protect (basic)', () => {
   const config = {
-    auth: {
+    protect: {
       source: '/admin*',
       username: 'jason',
       password: 'password'

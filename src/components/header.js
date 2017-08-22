@@ -8,6 +8,12 @@ export default function (req, res, headers = []) {
     throw new TypeError('"headers" must be an array')
   }
 
+  /* set our server header (it can be overwritten) */
+  res.headers.server = [{
+    key: 'Server',
+    value: 'Lambchop'
+  }]
+
   /* analyze each custom response header */
   for (const data of headers) {
     /* make sure object structure is correct */

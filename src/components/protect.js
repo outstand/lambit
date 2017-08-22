@@ -8,7 +8,7 @@ export default function (req, res, data) {
   }
 
   if (typeof data !== 'object') {
-    throw new TypeError('"auth" must be an object')
+    throw new TypeError('"protect" must be an object')
   }
 
   /* skip if route doesn't match (if there's a source) */

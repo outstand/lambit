@@ -1,3 +1,7 @@
+/**
+ * A safe way to get deep values of
+ * an object while defining defaults.
+ */
 export function get (obj, path, defaultVal) {
   if (obj === undefined || obj === null) {
     return defaultVal

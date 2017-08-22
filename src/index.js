@@ -1,7 +1,7 @@
 import { get } from './utils/deep'
 import trigger from './utils/trigger'
 import www from './components/www'
-import auth from './components/auth'
+import protect from './components/protect'
 import redirects from './components/redirect'
 import rewrites from './components/rewrite'
 import cleanUrls from './components/clean-url'
@@ -20,7 +20,7 @@ module.exports = (opts = {}) => (evt, ctx, cb) => {
     switch (trigger(req, res)) {
       case 'viewer-request': {
         www(req, res, opts.www)
-        auth(req, res, opts.auth)
+        protect(req, res, opts.protect)
 
         break
       }

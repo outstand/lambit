@@ -1,7 +1,7 @@
 {
   "name": "lambchop",
   "version": "0.3.0",
-  "description": "Modern hosting features for Lambda@Edge",
+  "description": "Static hosting features for Lambda@Edge",
   "author": "Jason Maurer",
   "license": "MIT",
   "homepage": "https://github.com/jsonmaur/lambchop#readme",
@@ -9,12 +9,16 @@
     "type": "git",
     "url": "git+https://github.com/jsonmaur/lambchop.git"
   },
+  "engines": {
+  },
   "keywords": [
     "aws",
     "amazon",
     "lambda",
     "edge",
     "lambda@edge",
+    "cloudfront",
+    "cdn",
     "static",
     "modern",
     "hosting",
