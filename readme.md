@@ -1,6 +1,6 @@
 # Lambchop [![Build Status](https://travis-ci.org/jsonmaur/lambchop.svg?branch=master)](https://travis-ci.org/jsonmaur/lambchop)
 
-A suite of modern hosting features for running static websites on AWS with Lambda@Edge. This library lets you mimic the functionality of static hosting services with features such as pushState routing and custom redirects, but with the power of CloudFront and Lambda running in your own AWS account. **Total control for a fraction of the cost.**
+A suite of modern hosting features for running static websites on AWS with Lambda@Edge functions. This library lets you mimic the functionality of static hosting services with things such as pushState routing and custom redirects, but with the power of CloudFront and Lambda running in your own AWS account. **Total control for a fraction of the cost.**
 
 If you're not familiar with Lambda@Edge, read up on it [here](https://aws.amazon.com/lambda/edge/). You can also checkout my [getting started tutorial](https://read.acloud.guru/supercharging-a-static-site-with-lambda-edge-da5a1314238b) for utilizing Lambda@Edge with static sites.
 
@@ -27,7 +27,8 @@ exports.handler = lambchop({
 })
 ```
 
-You will need to attach this function to three out of the four triggers on your CloudFront distribution: `viewer-request`, `origin-request` and `viewer-response`.
+You will need to attach this function to three out of the four triggers on your CloudFront distribution:  
+`viewer-request` `origin-request` `viewer-response`
 
 If you want to write some custom code in your Lambda function to run alongside Lambchop, just initialize it inside your function after you've done your thing:
 
@@ -53,7 +54,7 @@ exports.handler = (event, context, callback) => {
     > *Type: `boolean/array`*  
     > *Default: `false`*
     >
-    > If `true`, it will redirect all urls with `.html` extensions, and will append `.html` for origin requests on urls *without* an extension. It will also redirect any urls with an index file at the end (`/index.html => /`). If an array is used, it should be an array of [URL patterns](#pathmatching) to enable clean urls for.
+    > If `true`, will redirect all URLs with an `.html` extension and append `.html` for origin requests on urls *without* an extension. It will also redirect any urls with an index file at the suffix (`/hi/index.html` => `/hi/`). If an array is used, it should be an array of [URL patterns](#pathmatching) to enable clean urls for.
     >
     > ```javascript
     > cleanUrls: true // or
@@ -124,7 +125,7 @@ exports.handler = (event, context, callback) => {
     > *Type: `boolean`*  
     > *Default: none*
     >
-    > If `true`, all paths will be redirected to a www version of the site. If `false`, all paths will be redirected to a non-www version of the site (the apex in most cases.) If undefined, no action will take place for either www or non-www.
+    > If `true`, all paths will be redirected to a www version of the site. If `false`, all paths will be redirected to a non-www version of the site (the apex in most cases.) If undefined, no action will take place for either.
     >
     > ```javascript
     > www: true
@@ -133,7 +134,7 @@ exports.handler = (event, context, callback) => {
 <a name="pathmatching"></a>
 ## Path Matching
 
-For any config value that accepts a `source` key, you can specify a custom pattern to test against the URL. If a match is found, the operation will continue. If no matches are found, well... you get the picture. Path matching can be used in clean urls, rewrites, redirects,  protect and headers.
+For any config value that accepts a `source` key, you can specify a custom pattern to test against the URL. If a match is found, the operation will continue. If no matches are found, well... you get the picture. Path matching can be used for clean URLs, rewrites, redirects, headers and protect.
 
 ### Segments
 
@@ -146,7 +147,7 @@ For any config value that accepts a `source` key, you can specify a custom patte
 
 The above example will parse the URL and if it matches `source`, will extract `name` from the URL and construct a new URL in the destination.
 
-You can make a segment optional by appending `?` or a named wildcard by appending `+`. You can have as many segments as you want in the URL, but you can't have two segments right next to each other as in `/{segment1}{segment2}`, or two segments with the same name as in `/{segment}{segment}`. The segment name must only contain letters, numbers and underscores, and cannot be next to an unnamed wildcard as in `/{segment}*`.
+You can make a segment optional by appending `?` or a named wildcard by appending `+`. You can have as many segments as you want in the URL, but you can't have two segments right next to each other as in `/{segment1}{segment2}`, two segments with the same name as in `/{segment}/{segment}`, or a segment next to a wildcard as in `/{segment}*`. The segment name must only contain letters, numbers and underscores.
 
 ##### Examples
 
@@ -170,7 +171,7 @@ You can make a segment optional by appending `?` or a named wildcard by appendin
 }
 ```
 
-The above example will match anything prepended with `/hello/` such as `/hello/jane` and `/hello/jane/doe/really/long/path`. Using `*` in your pattern would be an "unnamed wildcard", meaning you can't extract the value and use it in your destination. If you want to use the extracted value in your destination, you can use a named wildcard as shown in the section above.
+The above example will match anything prepended with `/hello/` such as `/hello/jane` and `/hello/jane/doe/really/long/path`. Using `*` in your pattern is an "unnamed wildcard", meaning you can't extract the value and use it in your destination. If you want to use the extracted value in your destination, you can use a named wildcard as shown in the section above.
 
 ##### Examples
 
