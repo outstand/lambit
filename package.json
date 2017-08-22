@@ -1,6 +1,6 @@
 {
   "name": "lambit",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Static hosting features for Lambda@Edge",
   "author": "Jason Maurer",
   "license": "MIT",
