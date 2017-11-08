@@ -36,4 +36,10 @@ describe('integration: cleanUrls', () => {
     expect(args[1].status).to.equal('301')
     expect(args[1].headers.location[0].value).to.equal('/')
   })
+
+  it('adds index.html for origin', async () => {
+    const config = { cleanUrls: true }
+    const args = originRequest(config, '/hello/')
+    expect(args[1].uri).to.equal('/hello/index.html')
+  })
 })
