@@ -19,7 +19,7 @@ describe('integration: www', () => {
     const headers = { host: [{ key: 'Host', value: 'awesome.com' }] }
     const args = viewerRequest(config, '/hi', { headers })
     expect(args[1].status).to.equal('301')
-    expect(args[1].headers.location[0].value).to.equal('www.awesome.com/hi')
+    expect(args[1].headers.location[0].value).to.equal('https://www.awesome.com/hi')
   })
 
   it('redirects to no www', async () => {
@@ -27,6 +27,6 @@ describe('integration: www', () => {
     const headers = { host: [{ key: 'Host', value: 'www.awesome.com' }] }
     const args = viewerRequest(config, '/hi', { headers })
     expect(args[1].status).to.equal('301')
-    expect(args[1].headers.location[0].value).to.equal('awesome.com/hi')
+    expect(args[1].headers.location[0].value).to.equal('https://awesome.com/hi')
   })
 })
